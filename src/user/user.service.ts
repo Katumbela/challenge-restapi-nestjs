@@ -1,9 +1,9 @@
- 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
+import { UserResponseDto } from './dto/user.dto.response';
 import { ErrorResponse } from 'src/common/error-response';
 
 @Injectable()
@@ -13,47 +13,46 @@ export class UserService {
         private userRepository: Repository<User>,
     ) { }
 
-    async create(user: User): Promise<User | ErrorResponse> {
-         
+    async create(user: User): Promise<UserResponseDto | ErrorResponse> {
         const existingUserByNif = await this.userRepository.findOne({ where: { nif: user.nif } });
         if (existingUserByNif) {
             return new ErrorResponse('NIF already exists');
         }
 
-         
         const existingUserByEmail = await this.userRepository.findOne({ where: { email: user.email } });
         if (existingUserByEmail) {
             return new ErrorResponse('Email already exists');
         }
 
-         
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
 
-        return this.userRepository.save(user);
+        const savedUser = await this.userRepository.save(user);
+        return UserResponseDto.fromEntity(savedUser);  // Usando o método fromEntity
     }
 
-    async findAll(): Promise<User[]> {
-        return this.userRepository.find();
+    async findAll(): Promise<UserResponseDto[]> {
+        const users = await this.userRepository.find();
+        return users.map(user => UserResponseDto.fromEntity(user));  // Usando o método fromEntity
     }
 
-    async findOne(email: string): Promise<User | ErrorResponse> {
+    async findOne(email: string): Promise<UserResponseDto | ErrorResponse> {
         const user = await this.userRepository.findOne({ where: { email } });
         if (!user) {
             return new ErrorResponse('User not found');
         }
-        return user;
+        return UserResponseDto.fromEntity(user);  // Usando o método fromEntity
     }
 
-    async findOneById(id: number): Promise<User | ErrorResponse> {
+    async findOneById(id: number): Promise<UserResponseDto | ErrorResponse> {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) {
             return new ErrorResponse('User not found');
         }
-        return user;
+        return UserResponseDto.fromEntity(user);  // Usando o método fromEntity
     }
 
-    async chargeBalance(id: number, amount: number): Promise<User | ErrorResponse> {
+    async chargeBalance(id: number, amount: number): Promise<UserResponseDto | ErrorResponse> {
         if (amount <= 0 || isNaN(amount)) {
             return new ErrorResponse('Invalid amount');
         }
@@ -63,12 +62,12 @@ export class UserService {
             return new ErrorResponse('User not found');
         }
 
-        
         if (isNaN(user.balance)) {
             return new ErrorResponse('User balance is not valid');
         }
-        const t = user.balance + amount
+        const t = user.balance + amount;
         user.balance = t;
-        return this.userRepository.save(user);
+        const updatedUser = await this.userRepository.save(user);
+        return UserResponseDto.fromEntity(updatedUser);  // Usando o método fromEntity
     }
 }
