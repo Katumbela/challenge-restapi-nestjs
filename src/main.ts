@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import * as csurf from 'csurf';
+import helmet from 'helmet';
 
 
 async function bootstrap() {
@@ -17,6 +18,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(csurf());
+  app.use(helmet());
   const port = configService.get<number>('PORT') || 3000;
   await app.listen(port);
 }
