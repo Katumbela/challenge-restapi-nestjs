@@ -24,7 +24,7 @@ export class ServiceService {
 
     async findAll(): Promise<ServiceResponseDto[]> {
         const services = await this.serviceRepository.find({ relations: ['provider'] });
-        return services.map(service => this.toServiceResponseDto(service));  // Usa a função de flecha para garantir o contexto correto
+        return services.map(service => this.toServiceResponseDto(service)); 
     }
 
 

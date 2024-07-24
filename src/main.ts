@@ -18,15 +18,15 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Middleware de segurança
+   
   app.use(helmet());
  
   app.use(cookieParser());
 
-  // Middleware de CSRF com exclusão para a rota de login
+   
   app.use(new CsrfExcludeMiddleware().use.bind(new CsrfExcludeMiddleware()));
 
-  // Rota para obter o token CSRF
+  
   app.use((req, res, next) => {
     if (req.csrfToken) {
       res.cookie('XSRF-TOKEN', req.csrfToken());

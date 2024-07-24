@@ -28,12 +28,12 @@ export class UserService {
         user.password = hashedPassword;
 
         const savedUser = await this.userRepository.save(user);
-        return UserResponseDto.fromEntity(savedUser);  // Usando o método fromEntity
+        return UserResponseDto.fromEntity(savedUser); 
     }
 
     async findAll(): Promise<UserResponseDto[]> {
         const users = await this.userRepository.find();
-        return users.map(user => UserResponseDto.fromEntity(user));  // Usando o método fromEntity
+        return users.map(user => UserResponseDto.fromEntity(user)); 
     }
 
     async findOne(email: string): Promise<UserResponseDto | ErrorResponse> {
@@ -41,7 +41,7 @@ export class UserService {
         if (!user) {
             return new ErrorResponse('User not found');
         }
-        return UserResponseDto.fromEntity(user);  // Usando o método fromEntity
+        return UserResponseDto.fromEntity(user);  
     }
 
     async findOneById(id: number): Promise<UserResponseDto | ErrorResponse> {
@@ -49,7 +49,7 @@ export class UserService {
         if (!user) {
             return new ErrorResponse('User not found');
         }
-        return UserResponseDto.fromEntity(user);  // Usando o método fromEntity
+        return UserResponseDto.fromEntity(user);  
     }
 
     async chargeBalance(id: number, amount: number): Promise<UserResponseDto | ErrorResponse> {
@@ -68,6 +68,6 @@ export class UserService {
         const t = user.balance + amount;
         user.balance = t;
         const updatedUser = await this.userRepository.save(user);
-        return UserResponseDto.fromEntity(updatedUser);  // Usando o método fromEntity
+        return UserResponseDto.fromEntity(updatedUser);  
     }
 }

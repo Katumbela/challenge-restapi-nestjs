@@ -67,7 +67,7 @@ export class TransactionService {
     dto.date = transaction.date;
     dto.client = this.toUserResponseDto(transaction.client);
     dto.provider = this.toUserResponseDto(transaction.provider);
-    dto.serviceId = transaction.service.id; // Assuming you want to return the serviceId
+    dto.serviceId = transaction.service.id; 
     return dto;
   };
 

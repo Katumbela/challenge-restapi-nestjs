@@ -15,14 +15,14 @@ export class UserController {
     if (result instanceof ErrorResponse) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
-    return result;  // Já é um UserResponseDto
+    return result;  
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<UserResponseDto[]> {
     const users = await this.userService.findAll();
-    return users;  // Já é uma lista de UserResponseDto
+    return users;  
   }
 
   @UseGuards(JwtAuthGuard)
@@ -32,7 +32,7 @@ export class UserController {
     if (result instanceof ErrorResponse) {
       throw new HttpException(result.message, HttpStatus.NOT_FOUND);
     }
-    return result;  // Já é um UserResponseDto
+    return result;  
   }
 
   @UseGuards(JwtAuthGuard)
@@ -42,7 +42,7 @@ export class UserController {
     if (result instanceof ErrorResponse) {
       throw new HttpException(result.message, HttpStatus.NOT_FOUND);
     }
-    return result;  // Já é um UserResponseDto
+    return result; 
   }
 
   @UseGuards(JwtAuthGuard)
@@ -60,6 +60,6 @@ export class UserController {
     if (result instanceof ErrorResponse) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
-    return result;  // Já é um UserResponseDto
+    return result;   
   }
 }
